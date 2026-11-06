@@ -600,6 +600,98 @@ header.site .brand{transition:opacity .4s}
   .emp-res{animation:none}
   .emp-routes li:hover{transform:none}
 }
+
+/* ===== Rifinitura moderna (layer additivo: si può rimuovere senza effetti sul resto) ===== */
+/* barra di avanzamento della lettura */
+.mx-progress{position:fixed;left:0;top:0;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(var(--mx-p,0));background:linear-gradient(90deg,var(--green),var(--green-bright),#8fd3b0);z-index:60;pointer-events:none}
+
+/* header in vetro smerigliato quando è pieno */
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  header.site.solid,body:not(.home) header.site{background:rgba(15,35,24,.78);-webkit-backdrop-filter:saturate(160%) blur(14px);backdrop-filter:saturate(160%) blur(14px)}
+}
+header.site.solid::after,body:not(.home) header.site::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(143,211,176,.35),transparent)}
+
+/* header: più largo del contenuto su desktop, così menu e CTA non escono dal bordo */
+@media (min-width:1241px){header.site .wrap.head{max-width:1400px}}
+.head .btn{flex-shrink:0}
+@media (min-width:1241px) and (max-width:1439px){nav.main{gap:12px}nav.main a{letter-spacing:.1em}.head .btn{padding:16px 20px}.head{gap:16px}}
+
+/* ingresso morbido a ogni cambio pagina */
+[data-view]:not([hidden]){animation:mxView .55s var(--ease) both}
+@keyframes mxView{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* bottoni: lucentezza che attraversa, leggero sollevamento, ombra colorata */
+.btn{position:relative;overflow:hidden;isolation:isolate;border-radius:2px;transition:background .25s,color .25s,transform .35s var(--ease),box-shadow .35s var(--ease)}
+.btn::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);transform:translateX(-120%);transition:transform .8s var(--ease)}
+.btn:hover::after{transform:translateX(120%)}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-red{box-shadow:0 10px 24px -12px rgba(198,31,48,.75)}
+.btn-red:hover{box-shadow:0 16px 32px -14px rgba(198,31,48,.85)}
+.btn-dark:hover{box-shadow:0 14px 28px -14px rgba(15,35,24,.7)}
+.btn-line:hover{box-shadow:0 14px 28px -16px rgba(0,0,0,.6)}
+
+/* eyebrow con trattino */
+.eyebrow{display:inline-flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:22px;height:1px;background:currentColor;opacity:.7}
+.center-head .eyebrow::before,.hero2 .eyebrow::before,.emp-end .eyebrow::before{display:none}
+
+/* card con profondità 3D: inclinazione e riflesso seguono il puntatore (solo mouse) */
+.mx-tilt{transform-style:preserve-3d;will-change:transform}
+.mx-tilt.mx-on{transition:transform .12s linear,box-shadow .45s var(--ease)!important;box-shadow:var(--sh-2)}
+.mx-glare{position:absolute;inset:0;pointer-events:none;border-radius:inherit;opacity:0;transition:opacity .4s var(--ease);z-index:2;
+  background:radial-gradient(360px circle at var(--mx-x,50%) var(--mx-y,50%),rgba(0,166,90,.11),transparent 45%)}
+.mx-tilt.mx-on .mx-glare{opacity:1}
+.mx-tilt.mx-on>h3,.mx-tilt.mx-on>.ico,.mx-tilt.mx-on>b{transform:translateZ(22px);transition:transform .3s var(--ease)}
+
+/* luce che segue il puntatore e grana sulle superfici scure (elementi iniettati via JS) */
+.mx-spot{position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(560px circle at var(--mx-sx,80%) var(--mx-sy,20%),rgba(0,166,90,.16),transparent 60%)}
+.mx-grain{position:absolute;inset:0;pointer-events:none;opacity:.08;mix-blend-mode:overlay;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.page-hero>.wrap,.emp-hero>.wrap,.emp-fam>.wrap,.band>.wrap,.contact>.wrap{position:relative;z-index:1}
+.band,.contact,.emp-fam{position:relative;overflow:hidden}
+
+/* titoli delle aperture: comparsa a cascata */
+.page-hero .wrap>*,.emp-hero-txt>*{animation:mxRise .9s var(--ease) both}
+.page-hero .wrap>*:nth-child(2),.emp-hero-txt>*:nth-child(2){animation-delay:.08s}
+.page-hero .wrap>*:nth-child(3),.emp-hero-txt>*:nth-child(3){animation-delay:.16s}
+.page-hero .wrap>*:nth-child(4),.emp-hero-txt>*:nth-child(4){animation-delay:.24s}
+.page-hero .wrap>*:nth-child(5),.emp-hero-txt>*:nth-child(5){animation-delay:.32s}
+.emp-hero-txt>*:nth-child(6){animation-delay:.40s}
+@keyframes mxRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* FAQ: apertura in dissolvenza, indicatore rotondo */
+.faq details[open] p{animation:mxFaq .45s var(--ease) both}
+@keyframes mxFaq{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.faq summary::after{width:30px;height:30px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;font-size:20px!important;top:20px!important;background:#fff;transition:transform .35s var(--ease),background .3s,color .3s,border-color .3s!important}
+.faq details[open] summary::after{background:var(--green);color:#fff;border-color:var(--green)}
+.faq summary:hover{color:var(--green)}
+
+/* linea del tempo: il punto in evidenza pulsa */
+.tl .hl::before{animation:mxPulse 2.6s ease-out infinite}
+@keyframes mxPulse{0%{box-shadow:0 0 0 0 rgba(198,31,48,.55)}70%{box-shadow:0 0 0 12px rgba(198,31,48,0)}100%{box-shadow:0 0 0 0 rgba(198,31,48,0)}}
+
+/* note e side card: bordo luminoso sottile */
+.note,.side-card{transition:box-shadow .45s var(--ease),transform .45s var(--ease)}
+.side-card{box-shadow:var(--sh-1);border-radius:4px}
+.side-card:hover{box-shadow:var(--sh-2)}
+
+/* Empresas: globo in 3D che segue il puntatore e punto che viaggia sugli archi */
+.emp-map{perspective:900px}
+.emp-map svg{transform:rotateX(var(--mx-rx,0deg)) rotateY(var(--mx-ry,0deg));transition:transform .5s var(--ease);transform-style:preserve-3d;filter:drop-shadow(0 30px 40px rgba(0,0,0,.35))}
+.emp-travel{opacity:0;animation:empPin .6s var(--ease) 5.3s forwards}
+.emp-res li,.emp-routes li,.emp-role{border-radius:3px}
+.emp-finder label span{border-radius:2px}
+.emp-finder input:checked+span{box-shadow:0 10px 22px -12px rgba(15,35,24,.8)}
+.emp-fam-photo::before{transition:transform .8s var(--ease)}
+.emp-fam-photo:hover::before{transform:translate(-6px,-6px)}
+
+@media (prefers-reduced-motion:reduce){
+  [data-view]:not([hidden]),.page-hero .wrap>*,.emp-hero-txt>*,.faq details[open] p,.tl .hl::before{animation:none!important}
+  .btn::after{display:none}.btn:hover{transform:none}
+  .emp-map svg{transform:none!important}
+  .emp-travel{display:none}
+}
 </style>
 </head>
 <body class="home">
@@ -1094,8 +1186,9 @@ header.site .brand{transition:opacity .4s}
           <!-- sagome stilizzate, non cartografiche -->
           <path fill="url(#empDots)" d="M118 238c18-10 44-6 62 4 16 9 34 12 44 26 8 12 2 28-6 40-10 16-14 34-26 48-10 12-24 20-30 34-4 10-14 12-18 2-6-18-4-38-12-56-8-16-22-28-24-46-2-18-4-40 10-52z"/>
           <path fill="url(#empDots)" d="M340 92c16-10 34-14 52-10 14 3 26-6 40-2 14 4 18 18 30 22 14 4 26 14 22 28-4 12-20 12-28 22-8 10-4 26-16 32-12 6-24-4-36-2-14 2-24 14-38 10-14-4-16-20-26-28-12-8-18-22-12-36 4-12 2-28 12-36z"/>
-          <path class="emp-arc emp-arc-1" pathLength="1" fill="none" d="M196 318C222 196 300 140 372 140"/>
-          <path class="emp-arc emp-arc-2" pathLength="1" fill="none" d="M196 318C250 170 360 104 448 122"/>
+          <path id="empArc1" class="emp-arc emp-arc-1" pathLength="1" fill="none" d="M196 318C222 196 300 140 372 140"/>
+          <path id="empArc2" class="emp-arc emp-arc-2" pathLength="1" fill="none" d="M196 318C250 170 360 104 448 122"/>
+          <g class="emp-travel"><circle r="2.6" fill="#fff"><animateMotion dur="7s" begin="5s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines=".45 0 .2 1"><mpath href="#empArc1"/></animateMotion></circle><circle r="2.6" fill="#8fd3b0"><animateMotion dur="8s" begin="6.5s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines=".45 0 .2 1"><mpath href="#empArc2"/></animateMotion></circle></g>
           <g class="emp-pin emp-pin-br"><circle cx="196" cy="318" r="26" fill="url(#empGlow)"/><circle cx="196" cy="318" r="5" fill="#fff"/></g>
           <g class="emp-pin emp-pin-pt"><circle cx="372" cy="140" r="22" fill="url(#empGlow)"/><circle cx="372" cy="140" r="4.5" fill="#fff"/></g>
           <g class="emp-pin emp-pin-it"><circle cx="448" cy="122" r="22" fill="url(#empGlow)"/><circle cx="448" cy="122" r="4.5" fill="#fff"/></g>
@@ -1559,6 +1652,54 @@ document.getElementById('insPage').addEventListener('click',()=>insDlg.classList
     const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); }),{rootMargin:'0px 0px -45% 0px'});
     steps.forEach(s=>io.observe(s));
   } else steps.forEach(s=>s.classList.add('on'));
+})();
+
+// ---------- Rifinitura moderna: profondità 3D, luce, avanzamento lettura ----------
+(function(){
+  const reduceM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine=matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  // barra di avanzamento
+  const bar=document.createElement('div'); bar.className='mx-progress'; bar.setAttribute('aria-hidden','true'); document.body.appendChild(bar);
+  let tick=false;
+  function prog(){ const h=document.documentElement.scrollHeight-innerHeight; bar.style.setProperty('--mx-p',h>0?Math.min(1,scrollY/h):0); tick=false; }
+  addEventListener('scroll',()=>{ if(!tick){tick=true;requestAnimationFrame(prog);} },{passive:true});
+  addEventListener('hashchange',()=>setTimeout(prog,50)); prog();
+
+  // grana e luce sulle superfici scure
+  document.querySelectorAll('.page-hero,.emp-hero,.emp-fam,.band,.contact').forEach(s=>{
+    const g=document.createElement('span'); g.className='mx-grain'; g.setAttribute('aria-hidden','true'); s.prepend(g);
+  });
+  document.querySelectorAll('.page-hero,.emp-hero').forEach(s=>{
+    const l=document.createElement('span'); l.className='mx-spot'; l.setAttribute('aria-hidden','true'); s.prepend(l);
+    if(!fine||reduceM) return;
+    s.addEventListener('pointermove',e=>{ const r=s.getBoundingClientRect();
+      l.style.setProperty('--mx-sx',((e.clientX-r.left)/r.width*100)+'%'); l.style.setProperty('--mx-sy',((e.clientY-r.top)/r.height*100)+'%'); });
+  });
+
+  if(!fine||reduceM) return;
+
+  // card inclinabili (massimo 5 gradi)
+  document.querySelectorAll('.path,.step,.post,.emp-routes li,.emp-role,.side-card').forEach(el=>{
+    el.classList.add('mx-tilt'); if(getComputedStyle(el).position==='static') el.style.position='relative';
+    const gl=document.createElement('span'); gl.className='mx-glare'; gl.setAttribute('aria-hidden','true'); el.appendChild(gl);
+    let raf=0;
+    el.addEventListener('pointerenter',()=>el.classList.add('mx-on'));
+    el.addEventListener('pointermove',e=>{ cancelAnimationFrame(raf); raf=requestAnimationFrame(()=>{
+      const r=el.getBoundingClientRect(), x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height;
+      el.style.transform=`perspective(900px) rotateX(${(.5-y)*5}deg) rotateY(${(x-.5)*5}deg) translateY(-4px)`;
+      el.style.setProperty('--mx-x',x*100+'%'); el.style.setProperty('--mx-y',y*100+'%'); }); });
+    el.addEventListener('pointerleave',()=>{ cancelAnimationFrame(raf); el.classList.remove('mx-on'); el.style.transform=''; });
+  });
+
+  // globo della pagina Empresas
+  const hero=document.querySelector('.emp-hero'), map=document.querySelector('.emp-map');
+  if(hero&&map){
+    hero.addEventListener('pointermove',e=>{ const r=hero.getBoundingClientRect();
+      map.style.setProperty('--mx-ry',(((e.clientX-r.left)/r.width)-.5)*14+'deg');
+      map.style.setProperty('--mx-rx',(.5-((e.clientY-r.top)/r.height))*10+'deg'); });
+    hero.addEventListener('pointerleave',()=>{ map.style.setProperty('--mx-ry','0deg'); map.style.setProperty('--mx-rx','0deg'); });
+  }
 })();
 
 route();
