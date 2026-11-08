@@ -1,0 +1,4 @@
+# Cloudflare Pages: pubblica solo la cartella public/ (docs/ resta privata)
+name = "studio-legale-moura-machado"
+pages_build_output_dir = "./public"
+compatibility_date = "2026-11-01"
